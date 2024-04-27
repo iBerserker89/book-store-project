@@ -95,6 +95,25 @@ app.put('/books/:id', async (request, response) => {
     }
 });
 
+// Route para deletar um livro
+app.delete('/books/:id', async (request, response) => {
+    try {
+        const { id } = request.params;
+
+        const result = await Book.findByIdAndDelete(id);
+
+        if (!result) {
+            return response.status(404).json( { message: 'Book not found.' } );
+        }
+
+        return response.status(200).send( { message: 'Livro apagado com sucesso.' } );
+
+    } catch (error) {
+        console.log(error.message);
+        response.status(500).send( { message: error.message } );
+    }
+});
+
 mongoose
   .connect(mongoDBURL)
   .then(() => {
